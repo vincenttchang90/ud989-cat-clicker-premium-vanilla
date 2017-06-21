@@ -1,6 +1,3 @@
-
-/* ======= Model ======= */
-
 var model = {
     currentCat: null,
     cats: [
@@ -37,9 +34,6 @@ var model = {
     ]
 };
 
-
-/* ======= Octopus ======= */
-
 var octopus = {
 
     init: function() {
@@ -71,22 +65,27 @@ var octopus = {
         catView.render();
     },
 
+    //saves and checks for input
     save: function() {
-
+        if (document.getElementById('new-name').value != ''){
+            model.currentCat.name = document.getElementById('new-name').value;
+        };
+        if (document.getElementById('new-url').value != ''){
+            model.currentCat.imgSrc = document.getElementById('new-url').value;
+        };
+        if (Number.isInteger(parseInt(document.getElementById('new-clicks').value))){
+            model.currentCat.clickCount = parseInt(document.getElementById('new-clicks').value);
+        }
+        
+        catView.render();
+        catListView.render();
+        octopus.cancel();
     },
 
     cancel: function() {
         document.getElementById('admin-options').style.visibility = 'hidden';
+        document.getElementById('admin-inputs').reset();
 
-    },
-
-    showAdminOptions: function() {
-        if (document.getElementById('admin-options').style.visibility === 'visible') {
-            document.getElementById('admin-options').style.visibility = 'hidden';
-        }
-        else {
-            document.getElementById('admin-options').style.visibility = 'visible';
-        }
     }
 };
 
@@ -167,14 +166,25 @@ var adminModeView = {
 
     init: function() {
         document.getElementById('admin-button').addEventListener('click', function() {
-            octopus.showAdminOptions();
+            adminModeView.render();
         });
         document.getElementById('cancel-button').addEventListener('click', function() {
             octopus.cancel();
         });
-    
+        document.getElementById('save-button').addEventListener('click', function() {
+            octopus.save();
+        });
+    },
+
+    render: function() {
+        if (document.getElementById('admin-options').style.visibility === 'visible') {
+            document.getElementById('admin-options').style.visibility = 'hidden';
+        }
+        else {
+            document.getElementById('admin-options').style.visibility = 'visible';
+        };
     }
-}
+};
 
 // make it go!
 octopus.init();
